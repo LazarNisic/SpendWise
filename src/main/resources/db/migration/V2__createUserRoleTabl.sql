@@ -1,0 +1,6 @@
+CREATE TABLE "user_role" (
+    id INTEGER PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    role VARCHAR(50) NOT NULL,
+    CONSTRAINT USER_ROLE_FK FOREIGN KEY (user_id) REFERENCES "user" (ID)
+);
