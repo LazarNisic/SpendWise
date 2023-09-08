@@ -53,4 +53,10 @@ public class MonthlySalaryController {
         monthlySalaryService.delete(id);
         return ResponseEntity.ok().build();
     }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
+    @GetMapping(value = "find-monthly-salary-for-user/{userId}")
+    public ResponseEntity<MonthlySalaryDTO> findMonthlySalaryForUser(@Parameter(description = "User ID") @PathVariable Long userId) {
+        return new ResponseEntity<>(monthlySalaryService.findMonthlySalaryForUser(userId), HttpStatus.OK);
+    }
 }

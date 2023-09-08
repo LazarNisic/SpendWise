@@ -12,4 +12,8 @@ public class MonthlySalaryNotFound extends ApplicationException {
         super(String.format("Monthly salary id=[%s] not found", monthlySalaryId), ErrorCode.NOT_FOUND, APP_ERROR_CODE, Map.of("monthlySalaryId", monthlySalaryId));
     }
 
+    public MonthlySalaryNotFound(String message) {
+        super(String.format("[%s]", message), ErrorCode.NOT_FOUND, APP_ERROR_CODE);
+    }
+
 }
