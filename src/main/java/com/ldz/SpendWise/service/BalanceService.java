@@ -11,4 +11,8 @@ public interface BalanceService {
     BalanceDTO update(Long id, BalanceData balanceData);
 
     void delete(Long id);
+
+    //todo: implement findBalanceForUser method
+
+    //todo: implement receiveSalary method
 }
