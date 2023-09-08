@@ -12,5 +12,5 @@ public interface MonthlySalaryService {
 
     void delete(Long id);
 
-    //todo: implement method findMonthlySalaryForUser
+    MonthlySalaryDTO findMonthlySalaryForUser(Long userId);
 }

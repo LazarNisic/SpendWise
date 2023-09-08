@@ -58,4 +58,13 @@ public class MonthlySalaryServiceImpl implements MonthlySalaryService {
         authenticatedUserHelper.checkAuthenticatedUser(monthlySalary.getUser().getId());
         monthlySalaryRepository.deleteById(monthlySalary.getId());
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public MonthlySalaryDTO findMonthlySalaryForUser(Long userId) {
+        authenticatedUserHelper.checkAuthenticatedUser(userId);
+        MonthlySalary monthlySalary = monthlySalaryRepository.findByUser_Id(userId).orElseThrow(()
+                -> new MonthlySalaryNotFound(String.format("Monthly salary not found for user id = [%s]", userId)));
+        return monthlySalaryMapper.toDto(monthlySalary);
+    }
 }
