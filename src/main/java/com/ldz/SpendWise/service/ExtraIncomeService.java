@@ -14,7 +14,6 @@ public interface ExtraIncomeService {
 
     void delete(Long id);
 
-    //todo: Implement findExtraIncomeForMonth or findExtraIncomeForInterval
     Double findTotalExtraIncomeForMonth(Long userId, Integer month, Integer year);
     Double findTotalExtraIncomeForInterval(Long userId, LocalDateTime startDate, LocalDateTime endDate);
 }
