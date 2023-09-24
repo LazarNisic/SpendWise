@@ -67,4 +67,20 @@ public class BalanceController {
         balanceService.receiveSalary();
         return ResponseEntity.ok().build();
     }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
+    @Operation(summary = "Add balance amount", description = "Method for adding balance amount")
+    @PutMapping(value = "add-balance-amount/{id}")
+    public ResponseEntity<BalanceDTO> addBalanceAmount(@Parameter(description = "Balance ID") @PathVariable Long id,
+                                                       @Valid @RequestBody Double amount) {
+        return new ResponseEntity<>(balanceService.addBalanceAmount(id, amount), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
+    @Operation(summary = "Subtract balance amount", description = "Method for subtracting balance amount")
+    @PutMapping(value = "subtract-balance-amount/{id}")
+    public ResponseEntity<BalanceDTO> subtractBalanceAmount(@Parameter(description = "Balance ID") @PathVariable Long id,
+                                                            @Valid @RequestBody Double amount) {
+        return new ResponseEntity<>(balanceService.subtractBalanceAmount(id, amount), HttpStatus.OK);
+    }
 }

@@ -15,4 +15,8 @@ public interface BalanceService {
     BalanceDTO findBalanceForUser(Long userId);
 
     void receiveSalary();
+
+    BalanceDTO addBalanceAmount(Long id, Double amount);
+
+    BalanceDTO subtractBalanceAmount(Long id, Double amount);
 }
