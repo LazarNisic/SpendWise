@@ -10,7 +10,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface UserService {
-    //todo: implement findAll method
+    List<UserDTO> findAll();
     UserDTO findById(Long id);
 
     UserDTO findByUsername(String username);

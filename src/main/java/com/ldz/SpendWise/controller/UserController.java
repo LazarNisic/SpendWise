@@ -37,6 +37,12 @@ public class UserController {
     private final UserService userService;
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping
+    public ResponseEntity<List<UserDTO>> findAll() {
+        return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserDTO> findById(@Parameter(description = "User ID") @PathVariable Long id) {
         return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);

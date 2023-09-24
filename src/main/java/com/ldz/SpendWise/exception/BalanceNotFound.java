@@ -12,4 +12,8 @@ public class BalanceNotFound extends ApplicationException {
         super(String.format("Balance id=[%s] not found", balanceId), ErrorCode.NOT_FOUND, APP_ERROR_CODE, Map.of("balanceId", balanceId));
     }
 
+    public BalanceNotFound(String message) {
+        super(String.format("[%s]", message), ErrorCode.NOT_FOUND, APP_ERROR_CODE);
+    }
+
 }
