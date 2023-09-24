@@ -85,6 +85,24 @@ public class BalanceServiceImpl implements BalanceService {
         users.forEach(user -> receiveSalaryForUser(user.getId()));
     }
 
+    @Override
+    @Transactional
+    public BalanceDTO addBalanceAmount(Long id, Double amount) {
+        Balance balance = balanceRepository.findById(id).orElseThrow(() -> new BalanceNotFound(id));
+        balance.setAmount(balance.getAmount() + amount);
+        balance.setTimestamp(LocalDateTime.now());
+        return balanceMapper.toDto(balanceRepository.save(balance));
+    }
+
+    @Override
+    @Transactional
+    public BalanceDTO subtractBalanceAmount(Long id, Double amount) {
+        Balance balance = balanceRepository.findById(id).orElseThrow(() -> new BalanceNotFound(id));
+        balance.setAmount(balance.getAmount() - amount);
+        balance.setTimestamp(LocalDateTime.now());
+        return balanceMapper.toDto(balanceRepository.save(balance));
+    }
+
     private void receiveSalaryForUser(Long userId) {
         MonthlySalaryDTO monthlySalary = monthlySalaryService.findMonthlySalaryForUser(userId);
         BalanceDTO balance = findBalanceForUser(userId);

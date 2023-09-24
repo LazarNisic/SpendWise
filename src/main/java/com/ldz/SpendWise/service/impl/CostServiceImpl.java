@@ -1,6 +1,7 @@
 package com.ldz.SpendWise.service.impl;
 
 
+import com.ldz.SpendWise.dto.BalanceDTO;
 import com.ldz.SpendWise.dto.CostDTO;
 import com.ldz.SpendWise.exception.CostCategoryNotFound;
 import com.ldz.SpendWise.exception.CostNotFound;
@@ -10,6 +11,7 @@ import com.ldz.SpendWise.model.Cost;
 import com.ldz.SpendWise.model.CostCategory;
 import com.ldz.SpendWise.repository.CostCategoryRepository;
 import com.ldz.SpendWise.repository.CostRepository;
+import com.ldz.SpendWise.service.BalanceService;
 import com.ldz.SpendWise.service.CostCategoryService;
 import com.ldz.SpendWise.service.CostService;
 import com.ldz.SpendWise.service.data.CostCategoryData;
@@ -36,6 +38,7 @@ public class CostServiceImpl implements CostService {
     private final CostCategoryService costCategoryService;
     private final CostCategoryMapper costCategoryMapper;
     private final AuthenticatedUserHelper authenticatedUserHelper;
+    private final BalanceService balanceService;
 
     @Autowired
     @Lazy
@@ -60,6 +63,7 @@ public class CostServiceImpl implements CostService {
         } else {
             cost.setCostCategory(costCategoryOptional.get());
         }
+        updateBalanceForUser(costData, cost);
         cost.setAmount(costData.getAmount());
         cost.setDate(LocalDateTime.now());
         cost.setTimestamp(LocalDateTime.now());
@@ -77,6 +81,7 @@ public class CostServiceImpl implements CostService {
         } else {
             cost.setCostCategory(costCategoryOptional.get());
         }
+        updateBalanceForUser(costData, cost);
         cost.setAmount(costData.getAmount());
         Optional.ofNullable(costData.getDate()).ifPresent(cost::setDate);
         cost.setTimestamp(LocalDateTime.now());
@@ -115,7 +120,7 @@ public class CostServiceImpl implements CostService {
         //should use costCategoryService instead?
         costCategoryRepository.findByName(costCategoryName).orElseThrow(() -> new CostCategoryNotFound(costCategoryName));
         Double totalCostCategoryAmount = costRepository.findTotalCostForCostCategory(userId, startDate, endDate, costCategoryName);
-        Double totalCostPercentage = totalCostCategoryAmount / self.findTotalCost(userId, startDate, endDate) * 100;
+        double totalCostPercentage = totalCostCategoryAmount / self.findTotalCost(userId, startDate, endDate) * 100;
         Double roundedTotalCostPercentage = Math.round(totalCostPercentage * 100.0) / 100.0;
         return new TotalCostForCostCategoryResponse(totalCostCategoryAmount, roundedTotalCostPercentage);
     }
@@ -125,7 +130,7 @@ public class CostServiceImpl implements CostService {
     public TotalCostForCostCategoryResponse findTotalCostForCostCategoryForDate(Long userId, LocalDateTime date, String costCategoryName) {
         costCategoryRepository.findByName(costCategoryName).orElseThrow(() -> new CostCategoryNotFound(costCategoryName));
         Double totalCostCategoryAmount = costRepository.findTotalCostForCostCategory(userId, date.toLocalDate().atStartOfDay(), date.toLocalDate().atStartOfDay().plusHours(24), costCategoryName);
-        Double totalCostPercentage = totalCostCategoryAmount / self.findTotalCostForDate(userId, date) * 100;
+        double totalCostPercentage = totalCostCategoryAmount / self.findTotalCostForDate(userId, date) * 100;
         Double roundedTotalCostPercentage = Math.round(totalCostPercentage * 100.0) / 100.0;
         return new TotalCostForCostCategoryResponse(totalCostCategoryAmount, roundedTotalCostPercentage);
     }
@@ -135,8 +140,16 @@ public class CostServiceImpl implements CostService {
     public TotalCostForCostCategoryResponse findTotalCostForCostCategoryForMonth(Long userId, Integer month, Integer year, String costCategoryName) {
         costCategoryRepository.findByName(costCategoryName).orElseThrow(() -> new CostCategoryNotFound(costCategoryName));
         Double totalCostCategoryAmount = costRepository.findTotalCostForCostCategory(userId, LocalDateTime.of(year, month, 1, 0, 0, 0), LocalDateTime.of(year, month, 1, 0, 0, 0).plusMonths(1), costCategoryName);
-        Double totalCostPercentage = totalCostCategoryAmount / self.findTotalCostForMonth(userId, month, year) * 100;
+        double totalCostPercentage = totalCostCategoryAmount / self.findTotalCostForMonth(userId, month, year) * 100;
         Double roundedTotalCostPercentage = Math.round(totalCostPercentage * 100.0) / 100.0;
         return new TotalCostForCostCategoryResponse(totalCostCategoryAmount, roundedTotalCostPercentage);
+    }
+
+    private void updateBalanceForUser(CostData costData, Cost cost) {
+        BalanceDTO balance = balanceService.findBalanceForUser(cost.getCostCategory().getUser().getId());
+        if (cost.getAmount() != null) {
+            balanceService.addBalanceAmount(balance.getId(), cost.getAmount());
+        }
+        balanceService.subtractBalanceAmount(balance.getId(), costData.getAmount());
     }
 }
