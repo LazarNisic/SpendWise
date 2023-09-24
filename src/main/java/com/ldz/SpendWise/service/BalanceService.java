@@ -12,7 +12,7 @@ public interface BalanceService {
 
     void delete(Long id);
 
-    //todo: implement findBalanceForUser method
+    BalanceDTO findBalanceForUser(Long userId);
 
-    //todo: implement receiveSalary method
+    void receiveSalary();
 }

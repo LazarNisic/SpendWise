@@ -27,3 +27,5 @@ app:
     secret: bkhLWKTkNTsylUHzTkRh3DJnNEZDHgGcdCZoAxJCAkCr9Nep73NzSFJeI4NJVC1RFLbn9aozVmIXXx7V81EvvaXx9JjLLmqXCrlmyUOrS8swOCbjQywtGYaBY04JyeCo4Qj2OxKUyiX0tqUp/W202B8TKN6mnPLZRskLxtZJts6vA61WVIz1H21PzZiWHxaCChCFnbI1ICFTiPruUeRsg7g2QYArWbbubmpxtPRbe+epU8W2ZfNmvuGxmGa+YE/fdwEM7XGlBU8claNMeiYvw4/2gvMz49IN3ohcfycKOxsHtTJU13ekndBXezE7C58ODLuPJlCWI2LG/mXXiB9t
     access-expiration-ms: 90000000
     refresh-expiration-ms: 720000000
+  cron:
+    receive-salary: "0 0 0 * * *"

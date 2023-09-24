@@ -53,4 +53,18 @@ public class BalanceController {
         balanceService.delete(id);
         return ResponseEntity.ok().build();
     }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
+    @GetMapping(value = "find-balance-for-user/{userId}")
+    public ResponseEntity<BalanceDTO> findBalanceForUser(@Parameter(description = "User ID") @PathVariable Long userId) {
+        return new ResponseEntity<>(balanceService.findBalanceForUser(userId), HttpStatus.OK);
+    }
+
+    //todo: delete this controller later
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
+    @GetMapping(value = "receive-salary")
+    public ResponseEntity<Void> receiveSalary() {
+        balanceService.receiveSalary();
+        return ResponseEntity.ok().build();
+    }
 }

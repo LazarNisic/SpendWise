@@ -40,6 +40,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRoleRepository userRoleRepository;
 
+    //todo: cache this method
+    @Override
+    public List<UserDTO> findAll() {
+        return userMapper.toDto(userRepository.findAll());
+    }
+
     @Override
     @Transactional(readOnly = true)
     public UserDTO findById(Long id) {
