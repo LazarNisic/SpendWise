@@ -13,6 +13,7 @@ import java.util.List;
 public class AppConfiguration implements Serializable {
     private List<String> swaggerUrls;
     private Jwt jwt;
+    private List<String> corsAllowedOrigins;
 
     @Data
     public static class Jwt implements Serializable {

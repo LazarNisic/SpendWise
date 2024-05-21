@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthenticateRequest {
-    @NotBlank(message = "Password cannot be empty")
-    private String password;
     @NotBlank(message = "Username cannot be empty")
     private String username;
+    @NotBlank(message = "Password cannot be empty")
+    private String password;
     @NotBlank(message = "Authentication grant type")
     private TokenGrantType grantType;
     private String refreshToken;
